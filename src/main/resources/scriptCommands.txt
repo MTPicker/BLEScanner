@@ -1,0 +1,4 @@
+./sendPickletCommand.sh "34:85:18:25:3F:FA" "ON" 1 1 0 0
+./sendPickletCommand.sh "58:CF:79:F0:A1:7A" "ON" 1 1 0 0
+
+

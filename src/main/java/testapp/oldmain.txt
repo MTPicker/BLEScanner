@@ -1,0 +1,88 @@
+package testapp;
+
+import ble.PickletID;
+import com.welie.blessed.*;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.UUID;
+
+public class Main {
+
+    static BluetoothCentralManager central;
+    public static void main(String[] args) throws Exception {
+        //list of uuids to search for
+
+        String[] nameFilter = new String[1];
+        nameFilter[0] = "MyESP32";
+
+        //main callback service
+        System.out.println("Start manager callback");
+        final BluetoothPeripheralCallback bluetoothPeripheralCallback = new BluetoothPeripheralCallback() {
+            @Override
+            public void onBondingFailed(@NotNull BluetoothPeripheral peripheral) {
+                super.onBondingFailed(peripheral);
+                System.out.println("so sad");
+            }
+        };
+         final BluetoothCentralManagerCallback bluetoothCentralManagerCallback = new BluetoothCentralManagerCallback() {
+            @Override
+            public void onScanStarted() {
+                //super.onScanStarted();
+                System.out.println("Started scan!!");
+            }
+
+            @Override
+            public void onDiscoveredPeripheral(BluetoothPeripheral peripheral, ScanResult scanResult) {
+                super.onDiscoveredPeripheral(peripheral, scanResult);
+
+                System.out.println("Device discovered! " + scanResult);
+
+//                central.stopScan();
+//                central.connectPeripheral(peripheral, bluetoothPeripheralCallback);
+//                central.stopScan();
+            }
+
+             @Override
+             public void onConnectionFailed(@NotNull BluetoothPeripheral peripheral, @NotNull BluetoothCommandStatus status) {
+                 super.onConnectionFailed(peripheral, status);
+                 System.out.println("really sad");
+                 central.scanForPeripherals();
+             }
+
+             @Override
+             public void onConnectedPeripheral(BluetoothPeripheral peripheral) {
+                super.onConnectedPeripheral(peripheral);
+                 System.out.println("Connected!");
+//                 BluetoothGattCharacteristic gattCharacteristic = peripheral.getCharacteristic(pickletService, pickletChar);
+                 System.out.println(peripheral.getService(PickletID.pickletService));
+                 central.cancelConnection(peripheral);
+//                 if(service == null) {
+//                     System.out.println("not the one");
+//                     central.cancelConnection(peripheral);
+//                 }
+//                 if(service.getUuid().equals(pickletService)) {
+//                     System.out.println("Found it! " + peripheral.getAddress());
+//
+//                 }
+//                 byte[] value = "a".getBytes();
+//                 peripheral.writeCharacteristic(gattCharacteristic, value,
+//                         BluetoothGattCharacteristic.WriteType.WITH_RESPONSE);
+
+             }
+
+             @Override
+             public void onDisconnectedPeripheral(BluetoothPeripheral peripheral, BluetoothCommandStatus status) {
+                 super.onDisconnectedPeripheral(peripheral, status);
+             }
+         };
+
+        //main service to handle bt functions
+        System.out.println("Start main service");
+        central = new BluetoothCentralManager(bluetoothCentralManagerCallback);
+        central.scanForPeripheralsWithServices(uuidFilter);
+        central.re
+
+//        central.scanForPeripheralsWithNames(nameFilter);
+//        central.scanForPeripherals();
+    }
+}
