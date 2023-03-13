@@ -1,7 +1,6 @@
 Uses a http server on on port 8000 when running the application
 
-takes json data in the format of at the end point /test
-(full url in this example: http://localhost:8000/test)
+takes json data in the format of 
 
 {
     "address": "34:85:18:25:3F:FA",
@@ -11,6 +10,8 @@ takes json data in the format of at the end point /test
     "green": 1,
     "yellow": 0
 }
+at the end point /test
+(full url in this example: http://localhost:8000/test)
 
 The endpoint will add a connection to the BLEManager connection queue (the queue part doen't really work rn)
 
